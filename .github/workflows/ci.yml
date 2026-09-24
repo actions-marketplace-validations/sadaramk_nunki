@@ -22,7 +22,7 @@ jobs:
     name: rustfmt, clippy, tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
       # Same toolchain as the Docker image, so lints agree everywhere.
       - uses: dtolnay/rust-toolchain@1.91.0
         with:
@@ -36,7 +36,7 @@ jobs:
     name: IR contract (zod)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
       - uses: actions/setup-node@v7
         with:
           node-version: 24
@@ -49,7 +49,7 @@ jobs:
     name: Interactive pages (Playwright)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
       - uses: dtolnay/rust-toolchain@1.91.0
       - uses: Swatinem/rust-cache@v2
       - uses: actions/setup-node@v7
@@ -81,7 +81,7 @@ jobs:
     steps:
       # `fetch-depth: 0` so the pull request's base commit is present: `diff`
       # checks out both revisions itself and cannot invent a commit it wasn't given.
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
       # Exercises the action as a consumer would: it downloads the binary from the
@@ -108,7 +108,7 @@ jobs:
     name: Generated specs pass OpenSpec's validator
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
       - uses: dtolnay/rust-toolchain@1.91.0
       - uses: Swatinem/rust-cache@v2
       - uses: actions/setup-node@v7
@@ -132,7 +132,7 @@ jobs:
     name: Example book is up to date
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
       # Through Docker, like `make demo`: the container sees the fixture at a fixed
       # path and without this repository's `.git`, so the committed book is
       # reproducible on any machine and doesn't move with our commits.
