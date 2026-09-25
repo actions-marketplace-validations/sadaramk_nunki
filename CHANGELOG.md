@@ -6,6 +6,111 @@ All notable changes to this project are recorded here. The format follows
 `DiagramIR` schema and the CLI surface may still change between minor versions;
 `version` in every IR file says which schema it was written against.
 
+## [Unreleased]
+
+### Added
+
+- **Every request flow can be played.** A sequence diagram's messages are
+  numbered in the order they happen, so the flows page now walks them: Play,
+  Prev and Next step through the flow while the current message is lit on the
+  diagram beside it, with what is sent, of what kind, and the line that sends
+  it. This replaces the step table rather than joining it — the same messages in
+  the same order, one of them current. A flow whose diagram was hand-edited into
+  a different shape keeps the table, because a step can only highlight a message
+  the figure actually drew.
+
+  A walkthrough over a sequence holds the view still where a walkthrough over a
+  graph zooms to each hop: a sequence names its participants once, along the
+  top, and panning to a message would scroll those names away. The message is
+  brought into view only when it is not already there.
+
+### Fixed
+
+- A walkthrough's steps are searchable by what they say, not only by who is
+  talking, and the Markdown mirror draws a walkthrough's diagram — previously
+  the primary path appeared in the book with its figure and in the mirror
+  without it.
+
+## [Unreleased]
+
+### Added
+
+- **A book says how much of its system it specifies.** Six measures, each
+  dividing what the book accounts for by what the *source* contains: how much
+  of the source was read, how many entry points declare a contract, how many
+  operations were traced, how many entities were described, how many citations
+  verify, and how many requirements a person has given an actor and a purpose
+  for. The mean of them is on the evidence page, beside the measure holding it
+  down, and on the line `generate` prints.
+
+  Every denominator is counted from the code, so the number cannot be improved
+  by writing more prose — only by reading more of the repository, or by the
+  repository declaring more. A measure the source has nothing to count is left
+  out rather than scored zero: a library has no operations and a command-line
+  tool has no entities, and marking either down measures the repository's shape
+  instead of the book. The total says how many measures it rests on, because
+  one drawn from two is not the claim one drawn from six is.
+
+  A command counts as an entry point beside an HTTP operation. Without that,
+  nunki's own book scored 100% on the two measures that are nearly always 100%
+  while saying nothing about the thing it actually is. With it, nunki scores
+  71%, and names the reason: most of its own `clap` arguments have no doc
+  comment, so its published command reference has empty cells. (#58)
+
+## [Unreleased]
+
+### Fixed
+
+- **nunki's own command reference said nothing about most of its arguments.**
+  Thirty-two `clap` arguments across eleven commands carried no doc comment, so
+  the book nunki publishes about itself had an empty "What it does" cell for
+  each of them — including `PATH`, which every command takes. Every argument now
+  says what it is for, in the terms of the command it belongs to: `PATH` is the
+  repository to scan for `analyze`, to document for `generate`, and the one a
+  book describes for `check`.
+
+  Found by the specification score on its first run, which put nunki's own
+  contract-declared measure at 15%. It is 100% now. Help text only: every flag,
+  argument and value placeholder is unchanged, so the promise in #9 is
+  untouched. (#61)
+
+## [Unreleased]
+
+### Fixed
+
+- **`make demo` could regenerate the examples with a stale binary.** The image
+  stage copied the source and then compiled it, and BuildKit's normalised
+  mtimes against a cached `target/` directory let cargo conclude everything was
+  fresh: `cargo build --release` finished in 0.3s having compiled nothing, and
+  the example was rewritten by the *previous* binary. `make demo-check` then
+  passed, because it checked the book against the same stale binary that wrote
+  it — the drift these targets exist to catch, arriving through the mechanism
+  meant to prevent it.
+
+  Both targets now build in the `test` service, which bind-mounts the working
+  tree: real mtimes, no copy step, and cargo's own freshness check doing the
+  work. The recipe additionally refuses to run when the binary is older than
+  any source file, which is the invariant that broke. (#62)
+
+## [Unreleased]
+
+### Added
+
+- **The standing cost of connecting nunki to an agent is measured and
+  budgeted.** Every tool the MCP server publishes sits in the model's context
+  on every request, called or not, and MCP has no way to hide one until it is
+  named. Measured 2026-09-25: 4 tools, 9,454 characters, ~2,363 tokens — two
+  thirds of it `nunki_compile_diagram`'s inlined `DiagramIR` type graph,
+  against 1,479 characters for all four descriptions together.
+
+  The types stay inlined: they are why an agent can produce valid IR without a
+  round trip, and a pointer to `nunki schema` would buy context back by making
+  the self-heal loop the common path rather than the exception. What was
+  missing was the measurement. `nunki-mcp` now refuses a surface over 12,000
+  characters and prints the per-tool breakdown when it does, so the number
+  cannot double unnoticed. The reasoning and the measurement are in
+  `ROADMAP.md`. (#59)
+
 ## [0.5.0] - 2026-09-23
 
 ### Added
